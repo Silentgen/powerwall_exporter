@@ -1,8 +1,9 @@
 # .github/workflows/release.yaml
 
 on: 
-  release:
-    types: [created]
+  push:
+    branches:
+      - "main"
 
 jobs:
   releases-matrix:
@@ -29,3 +30,25 @@ jobs:
         overwrite: true
         # This many retries really shouldn't be necessary, but either the uploader or Github seems to be very flaky...
         retry: 10
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: joubinj/powerwall_exporter:latest

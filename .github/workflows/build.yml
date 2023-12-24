@@ -26,4 +26,4 @@ jobs:
           context: .
           push: true
           tags: joubinj/powerwall_exporter:latest
-          platforms: [linux/amd64,linux/arm64]
+          platforms: linux/amd64,linux/arm64

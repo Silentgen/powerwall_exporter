@@ -26,3 +26,4 @@ on:
           platforms: linux/amd64
           push: true
           tags: joubinj/powerwall_exporter:latest
+          platforms: [linux/amd64,linux/arm64]
